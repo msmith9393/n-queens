@@ -144,8 +144,10 @@
 
       for (var i = 0; i < board.length; i++) {
         var row = this.get(i);
-        count += row[majorDiagonalColumnIndexAtFirstRow];
-        majorDiagonalColumnIndexAtFirstRow++;
+        if (row[major] !== undefined) {
+          count += row[major];
+        }
+        major++;
       }
 
       return (count > 1) ? true : false;
@@ -156,16 +158,17 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      // var board = this.rows();
-      // var magicStorage = {};
+      var board = this.rows();
 
-      // for (var i = -(board.length - 1); i < board.length; i++) {
-      //   if (this.hasAnyMajorDiagonalConflicts(i)) {
-      //     return true;
-      //   }
-      // }
+      for (var i = -(board.length - 1); i < board.length; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
 
-      // return false;
+
+
     },
 
 
