@@ -131,8 +131,6 @@
       return false;
     },
 
-
-
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
     //
@@ -149,7 +147,6 @@
         }
         major++;
       }
-
       return (count > 1) ? true : false;
     },
     // _getFirstRowColumnIndexForMajorDiagonalOn: function(rowIndex, colIndex) {
@@ -166,9 +163,6 @@
         }
       }
       return false;
-
-
-
     },
 
 
@@ -177,12 +171,31 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this.rows();
+      var count = 0;
+      var minor = minorDiagonalColumnIndexAtFirstRow;
+
+      for (var i = 0; i < board.length; i++) {
+        var row = this.get(i);
+        if (row[minor] !== undefined) {
+          count += row[minor];
+        }
+        minor--;
+      }
+
+      return (count > 1) ? true : false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this.rows();
+
+      for (var i = 0; i < ((board.length * 2) - 1); i++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
