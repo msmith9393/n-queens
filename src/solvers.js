@@ -98,47 +98,92 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, 
 // with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = new Board({n:n});
 
-  var findSolution = function(row) {
-    // base case if finished recursing through all rows
-    if (row === n - 1) {
-      // increment our solutionCount
-      return;  
-    }
+  var solution;
+  var board = new Board({n:n});
+  var workingRow = 0;
+  var numColumns = n;
 
-    // iterate over each column in indicated row
-    for (var i = 0; i < n; i++) {
-      // toggle current piece
-      if (i === n-1) {
-        console.log(solution.rows())
-      }
-      solution.togglePiece(row, i);
-      // it there are no conflicts
-      if (!solution.hasAnyQueensConflicts()) {
-        // search for solutions in next row
-        findSolution(row + 1);
-        // untoggle piece for next iteration
-        // solution.togglePiece(row, i);
-      // if there is a conflict immediately
-      } else {
-        // untoggle the piece
-        
-        solution.togglePiece(row, i);
+  var helper = function(workingRow) {
+    for (var i = 0; i < numColumns; i++) {
+      board.togglePiece(workingRow, i);
+      //Check for conflict.
+        //If conflict, untoggle piece,
+      if (board.hasAnyQueensConflicts()) {
+        board.togglePiece(workingRow, i);
         continue;
+      //Base case: if get to bottom, add to solution
+      }
+      if (workingRow === n - 1) {
+        //board.togglePiece(workingRow, i)
+        solution = board.rows();
+        break;
+      //Recursive case: Iterate to next row and call the same
+      } else {
+        helper(workingRow + 1);
+        if (solution === undefined) {
+          board.togglePiece(workingRow, i);
+        }
       }
     }
-
   };
-  if (n === 1) {
-    return [[1]];
+
+  if (n === 0) {
+    return [];
+  } else if (n === 1) {
+    solution = [[1]];
+  } else if (n === 2) {
+    solution = [[0, 0], [0, 0]];
+  } else if (n === 3) {
+    solution = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  } else {
+    helper(workingRow);
   }
-  findSolution(0);
-
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution.rows();
-
+  
+  console.log('Single solution for ' + n + ' queens:', solution);
+  return solution;
 };
+  // var solution = new Board({n:n});
+
+  // var findSolution = function(row) {
+  //   // base case if finished recursing through all rows
+  //   if (row === n - 1) {
+  //     // increment our solutionCount
+  //     return;  
+  //   }
+
+  //   // iterate over each column in indicated row
+  //   for (var i = 0; i < n; i++) {
+  //     // toggle current piece
+  //     if (i === n-1) {
+  //       console.log(solution.rows())
+  //     }
+  //     solution.togglePiece(row, i);
+  //     // it there are no conflicts
+  //     if (!solution.hasAnyQueensConflicts()) {
+  //       // search for solutions in next row
+  //       findSolution(row + 1);
+  //       // untoggle piece for next iteration
+  //       // solution.togglePiece(row, i);
+  //     // if there is a conflict immediately
+  //     } else {
+  //       // untoggle the piece
+        
+  //       solution.togglePiece(row, i);
+  //       continue;
+  //     }
+  //   }
+
+  // };
+  // if (n === 1) {
+  //   return [[1]];
+  // }
+  // findSolution(0);
+
+  // console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  // return solution.rows();
+
+// };
 
 // return the number of nxn chessboards that exist, with n queens placed such 
 // that none of them can attack each other
